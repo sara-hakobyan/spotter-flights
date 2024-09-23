@@ -1,5 +1,8 @@
 import { Box, Card, Input, TextField } from "@mui/material";
 import { ChangeEvent } from "react";
+import FlightService from "../../services/FlightService";
+
+const service = new FlightService();
 
 export default function FlightSearch() {
   return (
@@ -21,12 +24,15 @@ export default function FlightSearch() {
 }
 
 function AutoCompeteAirport() {
-  const onInputChange = (ev: ChangeEvent<HTMLInputElement>) => {
+  const onInputChange = async (ev: ChangeEvent<HTMLInputElement>) => {
     const target = ev.currentTarget;
     const val = target.value;
 
     console.log(val);
+
+    await service.searchAirport(val);
   };
+
   return (
     <Box>
       {/* <Input sx={{ border: "1px solid gray", borderRadius: "5px" }} /> */}
