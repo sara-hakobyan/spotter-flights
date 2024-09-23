@@ -2,6 +2,12 @@ import { Box, Typography } from "@mui/material";
 import flightsImg from "../../assets/images/flights_nc_4.svg";
 
 export function Header() {
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition((position) => {
+  //     console.log(position.coords.latitude, position.coords.longitude);
+  //   });
+  // }
+
   return (
     <Box width={"100%"} paddingBottom={"15px"}>
       <Box
