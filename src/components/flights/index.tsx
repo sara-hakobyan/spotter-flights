@@ -1,6 +1,9 @@
 import { Box, Card, Input, TextField } from "@mui/material";
 import { ChangeEvent } from "react";
 import FlightService from "../../services/FlightService";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
+import { airportSearchAsync } from "../../state/airportSearch/airportSearchSlice";
 
 const service = new FlightService();
 
@@ -24,13 +27,16 @@ export default function FlightSearch() {
 }
 
 function AutoCompeteAirport() {
+  const data = useSelector((state: RootState) => state.airportSearch);
+  const dispatch = useDispatch<AppDispatch>();
+  console.log(JSON.stringify(data, null, 2));
+
   const onInputChange = async (ev: ChangeEvent<HTMLInputElement>) => {
     const target = ev.currentTarget;
     const val = target.value;
 
-    console.log(val);
-
-    await service.searchAirport(val);
+    dispatch(airportSearchAsync(val));
+    // await service.searchAirport(val);
   };
 
   return (

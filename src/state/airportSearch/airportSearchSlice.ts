@@ -1,11 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import FlightService from "../../services/FlightService";
+import { IAirportSearchData } from "../../dataInterface/airportsearchData";
+const service = new FlightService();
 
 interface AirportState {
-  value: any;
+  data: IAirportSearchData | null;
+  isLoading: boolean;
+  error: string;
 }
 
 const initialState: AirportState = {
-  value: null,
+  data: null,
+  isLoading: false,
+  error: "",
 };
 
 const airportSearchSlice = createSlice({
@@ -14,12 +21,25 @@ const airportSearchSlice = createSlice({
   reducers: {
     search: (state) => {},
   },
+  extraReducers: (builder) => {
+    builder.addCase(airportSearchAsync.pending, (state) => {
+      state.isLoading = true;
+    });
+    builder.addCase(
+      airportSearchAsync.fulfilled,
+      (state, action: PayloadAction<IAirportSearchData>) => {
+        state.data = action.payload;
+        state.isLoading = false;
+      }
+    );
+  },
 });
 
 export const airportSearchAsync = createAsyncThunk(
   "airportSearch/searchAsync",
   async (value: string) => {
-    
+    const response = await service.searchAirport(value);
+    return response;
   }
 );
 

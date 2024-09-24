@@ -32,8 +32,6 @@ export default class FlightService {
   // }
 
   async searchAirport(value: string) {
-    console.log(process.env.REACT_APP_BASE_URL);
-    console.log(`${this.baseURL}/searchAirport/${value}`);
     const res = await fetch(`${this.baseURL}/searchAirport?query=${value}`, {
       method: "GET",
       headers: {
@@ -43,7 +41,6 @@ export default class FlightService {
       },
     });
     const data = await res.json();
-    console.log(data, res);
     return data;
   }
 }
