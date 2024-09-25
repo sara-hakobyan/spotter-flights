@@ -1,0 +1,28 @@
+.header-container {
+  width: 100%;
+  padding-bottom: 15px;
+  position: relative;
+  max-width: 1245px;
+  margin: 0 auto;
+}
+
+.header-img {
+  width: 100%;
+  height: auto;
+  max-height: 80vh;
+  transition: transform 0.3s ease-in-out;
+}
+
+.header-title {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+
+  h2 {
+    font-size: clamp(20px, 12vw, 40px);
+    transition: font-size 0.3s ease-in-out;
+  }
+}
