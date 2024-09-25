@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import airportSearchReducer from "./airportSearch/airportSearchSlice";
+import airportSearchReducer from "./flightSearch/airportSearchSlice";
 
 export const store = configureStore({
   reducer: {

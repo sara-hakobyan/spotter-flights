@@ -1,91 +1,51 @@
 import { Box, Button, Card } from "@mui/material";
-import CabinClassMenu from "../cabinClassMenu";
 import PassangerSelect from "../passangerSelect";
-import AutoCompeteAirport from "./autocompleteAirportSearch";
-import CustomDatePicker from "./datePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../state/store";
-import { flightSearchAsync } from "../../state/airportSearch/airportSearchSlice";
+import { flightSearchAsync } from "../../state/flightSearch/airportSearchSlice";
 import FlightService from "../../services/FlightService";
-import { TripTypeMenu } from "../triptypeMenu";
+import { TripTypeMenu } from "../menus/triptypeMenu";
+import "./index.css";
+import { CustomFlightSearch } from "./autocompleteAirportSearch/customFlghtSearch";
+import { TRIP_TYPE } from "../../dataInterface/stateInterface/flightSearchInterface";
+import CabinClassMenu from "../menus/cabinClassMenu";
+import { useCallback } from "react";
 const service = new FlightService();
 
 export default function FlightSearch() {
-  const data = useSelector(
-    (state: RootState) => state.airportSearch.flightParams
-  );
+  const data = useSelector((state: RootState) => state.airportSearch);
   const dispatch = useDispatch<AppDispatch>();
 
-  const serachBtnHandler = async () => {
-    console.log(data);
+  const serachBtnHandler = useCallback(async () => {
     dispatch(flightSearchAsync());
-  };
+  }, []);
 
   return (
     <>
-      <Card
-        sx={{
-          boxShadow:
-            "1px 3px 0 rgba(60, 64, 67, .3), 0 4px 8px 3px rgba(60, 64, 67, .15);",
-          width: "1100px",
-          height: "fitContent",
-          WebkitBorderRadius: "10px",
-          padding: "15px",
-        }}
-      >
-        <Box display={"flex"} padding={"5px"}>
-          <Box className="trip-menu" width={"120px"}>
+      <Card className="card-container">
+        <Box className="flex-container menu-container">
+          <Box className="trip-menu">
             <TripTypeMenu />
           </Box>
-          <Box className="passanger-menu" width={"100px"}>
+          <Box className="passanger-menu">
             <PassangerSelect />
           </Box>
           <Box className="cabin-menu">
             <CabinClassMenu />
           </Box>
         </Box>
-
-        <CustomFlightSearch triptType="round" />
-
+        <Box>
+          <CustomFlightSearch triptType="round" />
+          <Box display={"flex"}>
+            {data.tripType === TRIP_TYPE.Multy_City ? (
+              <Button variant="contained">add fligh</Button>
+            ) : null}
+          </Box>
+        </Box>
         <Button variant="contained" onClick={serachBtnHandler}>
           search
         </Button>
       </Card>
     </>
-  );
-}
-
-interface ICustomFlightSearch {
-  triptType: string;
-}
-
-function CustomFlightSearch(props: ICustomFlightSearch) {
-  return (
-    <Box
-      display={"flex"}
-      alignItems={"self-end"}
-      flexDirection={"row"}
-      sx={{ boxSizing: "border-box" }}
-      flexWrap={"wrap"}
-    >
-      <Box display={"flex"}>
-        <Box width={"250px"} p={"10px"}>
-          <AutoCompeteAirport label="from" />
-        </Box>
-        <Box width={"250px"} p={"10px"}>
-          <AutoCompeteAirport label="to" />
-        </Box>
-      </Box>
-      <Box display={"flex"}>
-        <Box width={"250px"} p={"10px"}>
-          <CustomDatePicker label="Departure*" disablePast={true} />
-        </Box>
-        {props.triptType === "round" ? (
-          <Box width={"250px"} p={"10px"}>
-            <CustomDatePicker label="Return" disablePast={false} />
-          </Box>
-        ) : null}
-      </Box>
-    </Box>
   );
 }

@@ -4,14 +4,18 @@ import IRemoteData, {
   IAirportSearchData,
 } from "../../dataInterface/airportsearchData";
 import { stringifyingErrMsg } from "../../helpers/stringifyErrorMsgs";
-import { FLIGHT_SEARCH_PARAMS } from "../../dataInterface/stateInterface/flightSearchInterface";
+import {
+  CABIN_CLASS,
+  FLIGHT_SEARCH_PARAMS,
+  FlightSearchT,
+  TRIP_TYPE,
+} from "../../dataInterface/stateInterface/flightSearchInterface";
 import { FlightDataResponse } from "../../dataInterface/stateInterface/remoteDataInterface/flightsDataInterface";
 const service = new FlightService();
 
 const initialState: {
-  flightParams: {
-    [key: string]: string;
-  };
+  flightParams: FlightSearchT;
+  tripType: string;
   remoteAirportSearch: {
     [key: string]: IRemoteData<IAirportSearchData | null>;
   };
@@ -35,12 +39,15 @@ const initialState: {
     error: "",
   },
   flightParams: {
-    [FLIGHT_SEARCH_PARAMS.Origin]: "",
-    [FLIGHT_SEARCH_PARAMS.Destination]: "",
-    [FLIGHT_SEARCH_PARAMS.OriginEntity]: "",
-    [FLIGHT_SEARCH_PARAMS.DestinationEntity]: "",
-    [FLIGHT_SEARCH_PARAMS.Date]: "",
+    [FLIGHT_SEARCH_PARAMS.Origin]: "EWR",
+    [FLIGHT_SEARCH_PARAMS.Destination]: "LHR",
+    [FLIGHT_SEARCH_PARAMS.OriginEntity]: "95565059",
+    [FLIGHT_SEARCH_PARAMS.DestinationEntity]: "95565050",
+    [FLIGHT_SEARCH_PARAMS.Date]: "2024-10-15",
+    [FLIGHT_SEARCH_PARAMS.CabinClass]: CABIN_CLASS.Economy.toLowerCase(),
+    [FLIGHT_SEARCH_PARAMS.Limit]: 5,
   },
+  tripType: TRIP_TYPE.One_Way,
 };
 
 const flightsSearchSlice = createSlice({
@@ -59,6 +66,9 @@ const flightsSearchSlice = createSlice({
     //   state.isLoading = false;
     //   state.error = "";
     // },
+    setTripType: (state, action: PayloadAction<string>) => {
+      state.tripType = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -137,6 +147,6 @@ export const flightSearchAsync = createAsyncThunk(
   }
 );
 
-export const { assignSearchParams } = flightsSearchSlice.actions;
+export const { assignSearchParams, setTripType } = flightsSearchSlice.actions;
 
 export default flightsSearchSlice.reducer;

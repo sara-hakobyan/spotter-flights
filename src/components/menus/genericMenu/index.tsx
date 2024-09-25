@@ -4,14 +4,12 @@ import { useCallback, useState } from "react";
 interface ICustomMenu {
   menueItems: any;
   itemHandler: (value: string) => void;
+  value: string;
 }
 
 export default function CustomMenu(props: ICustomMenu) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [cabinClass, setCabinClass] = useState(
-    (Object.values(props.menueItems)[0] as string)?.toUpperCase()
-  );
 
   const handleClose = useCallback(() => {
     setAnchorEl(null);
@@ -25,14 +23,15 @@ export default function CustomMenu(props: ICustomMenu) {
   );
 
   const handleChange = useCallback((e: React.FormEvent<HTMLElement>) => {
-    const value = e.currentTarget.textContent as string;
-    setCabinClass(value);
+    const value = e.currentTarget.innerText as string;
+    console.log({ value });
     handleClose();
+    props.itemHandler(value);
   }, []);
 
   return (
     <Box>
-      <Button onClick={handleBtnClick}>{cabinClass}</Button>
+      <Button onClick={handleBtnClick}>{props.value}</Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {Object.values(props.menueItems).map((item, index) => (
           <MenuItem key={index} onClick={handleChange}>

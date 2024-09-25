@@ -39,6 +39,9 @@ export default class FlightService {
   async searchFlight(params: any) {
     let paramsData = "";
     Object.values(FLIGHT_SEARCH_PARAMS).map((obj) => {
+      if (!params[obj]) {
+        return;
+      }
       paramsData += `${obj}=${params[obj]}&`;
     });
     paramsData = `?${paramsData.slice(0, -1)}`;
