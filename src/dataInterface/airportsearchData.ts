@@ -31,6 +31,6 @@ export interface IAirportSearchData {
 export default interface IRemoteData<T> {
   isLoading: boolean;
   error: string;
-  message: string;
+  message?: string;
   data: T
 }
