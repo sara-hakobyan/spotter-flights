@@ -1,10 +1,4 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Menu,
-  Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, Menu, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { PASSANGER_TYPE } from "../../dataInterface/stateInterface/flightSearchInterface";
@@ -12,8 +6,11 @@ import { useCallback, useMemo, useState } from "react";
 import PersonIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ArrowDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/ArrowDropUpOutlined";
+import { useSelector } from "react-redux";
+import { RootState } from "../../state/store";
 
 export default function PassangerSelect() {
+  const data = useSelector((state: RootState) => state.airportSearch);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
@@ -34,6 +31,7 @@ export default function PassangerSelect() {
         onClick={handleBtnClick}
         startIcon={<PersonIcon />}
         endIcon={open ? <ArrowUpIcon /> : <ArrowDownIcon />}
+        disabled={data.remoteFlightsData.isLoading}
       >
         {" "}
         1

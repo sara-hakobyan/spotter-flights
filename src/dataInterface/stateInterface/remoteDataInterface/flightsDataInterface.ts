@@ -6,6 +6,7 @@ export interface FlightDataResponse {
     context: Context;
     itineraries: Itinerary[];
   };
+  message?: string;
 }
 
 interface Context {
@@ -58,6 +59,7 @@ interface AirportInfo {
 
 interface Carriers {
   marketing: Carrier[];
+  operating: Carrier[];
   operationType: string;
 }
 

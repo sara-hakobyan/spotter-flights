@@ -1,20 +1,23 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
-import CustomMenu from "../genericMenu";
-import { CABIN_CLASS, FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/flightSearchInterface";
-import { AppDispatch } from "../../../state/store";
+import {
+  CABIN_CLASS,
+  FLIGHT_SEARCH_PARAMS,
+} from "../../../dataInterface/stateInterface/flightSearchInterface";
+import { AppDispatch, RootState } from "../../../state/store";
 import { assignSearchParams } from "../../../state/flightSearch/airportSearchSlice";
+import CustomMenu from "../genericMenu";
 
 export default function CabinClassMenu() {
-  // const stateCabinClass = useSelector(
-  //   (state: RootState) => state.airportSearch.flightParams.cabinClass
-  // );
+  const isLoading = useSelector(
+    (state: RootState) => state.airportSearch.remoteFlightsData.isLoading
+  );
   const dispatch = useDispatch<AppDispatch>();
   const [value, setValue] = useState("Economy");
 
   const handler = useCallback((val: string) => {
-    const newValue = val.replace(/ /g, "_").slice(0, -1).toLowerCase();
+    const newValue = val.replace(/ /g, "_").toLowerCase();
     dispatch(
       assignSearchParams({ [FLIGHT_SEARCH_PARAMS.CabinClass]: newValue })
     );
@@ -22,6 +25,11 @@ export default function CabinClassMenu() {
   }, []);
 
   return (
-    <CustomMenu menueItems={CABIN_CLASS} itemHandler={handler} value={value} />
+    <CustomMenu
+      menueItems={CABIN_CLASS}
+      itemHandler={handler}
+      value={value}
+      isDisabled={isLoading}
+    />
   );
 }

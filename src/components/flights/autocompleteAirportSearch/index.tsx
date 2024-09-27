@@ -14,6 +14,7 @@ import {
 
 interface IAutocomplete {
   label: string;
+  isDisabled: boolean;
 }
 
 type OptionT = {
@@ -116,6 +117,7 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
 
   return (
     <Autocomplete
+      disabled={props.isDisabled}
       filterOptions={(x) => x}
       sx={{ width: "inherit" }}
       options={optionsData || []}

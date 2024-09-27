@@ -11,6 +11,7 @@ import { assignSearchParams } from "../../../state/flightSearch/airportSearchSli
 interface IDatePicekr {
   label: string;
   disablePast: boolean;
+  isDisabled: boolean;
 }
 
 export default function CustomDatePicker(props: IDatePicekr) {
@@ -39,6 +40,7 @@ export default function CustomDatePicker(props: IDatePicekr) {
           disablePast={props.disablePast}
           format="YYYY-MM-DD"
           label={props.label}
+          disabled={props.isDisabled}
         />
       </DemoContainer>
     </LocalizationProvider>

@@ -5,6 +5,7 @@ interface ICustomMenu {
   menueItems: any;
   itemHandler: (value: string) => void;
   value: string;
+  isDisabled: boolean;
 }
 
 export default function CustomMenu(props: ICustomMenu) {
@@ -24,14 +25,15 @@ export default function CustomMenu(props: ICustomMenu) {
 
   const handleChange = useCallback((e: React.FormEvent<HTMLElement>) => {
     const value = e.currentTarget.innerText as string;
-    console.log({ value });
     handleClose();
     props.itemHandler(value);
   }, []);
 
   return (
     <Box>
-      <Button onClick={handleBtnClick}>{props.value}</Button>
+      <Button onClick={handleBtnClick} disabled={props.isDisabled}>
+        {props.value}
+      </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {Object.values(props.menueItems).map((item, index) => (
           <MenuItem key={index} onClick={handleChange}>

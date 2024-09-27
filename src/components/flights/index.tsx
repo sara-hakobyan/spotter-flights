@@ -6,10 +6,12 @@ import { flightSearchAsync } from "../../state/flightSearch/airportSearchSlice";
 import FlightService from "../../services/FlightService";
 import { TripTypeMenu } from "../menus/triptypeMenu";
 import "./index.css";
-import { CustomFlightSearch } from "./autocompleteAirportSearch/customFlghtSearch";
+import { CustomFlightSearch } from "./customFlghtSearch";
 import { TRIP_TYPE } from "../../dataInterface/stateInterface/flightSearchInterface";
 import CabinClassMenu from "../menus/cabinClassMenu";
 import { useCallback } from "react";
+import LoadingButton from "@mui/lab/LoadingButton";
+
 const service = new FlightService();
 
 export default function FlightSearch() {
@@ -35,16 +37,21 @@ export default function FlightSearch() {
           </Box>
         </Box>
         <Box>
-          <CustomFlightSearch triptType="round" />
+          <CustomFlightSearch />
           <Box display={"flex"}>
             {data.tripType === TRIP_TYPE.Multy_City ? (
               <Button variant="contained">add fligh</Button>
             ) : null}
           </Box>
         </Box>
-        <Button variant="contained" onClick={serachBtnHandler}>
-          search
-        </Button>
+
+        <LoadingButton
+          loading={data.remoteFlightsData.isLoading}
+          variant="contained"
+          onClick={serachBtnHandler}
+        >
+          Search
+        </LoadingButton>
       </Card>
     </>
   );

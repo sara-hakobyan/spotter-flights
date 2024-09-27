@@ -58,4 +58,5 @@ export enum FLIGHT_SEARCH_PARAMS {
   Childrens = "childrens",
   Infants = "infants",
   Limit = "limit",
+  SortBy = "sortBy"
 }

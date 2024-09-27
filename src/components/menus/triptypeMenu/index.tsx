@@ -6,18 +6,19 @@ import { setTripType } from "../../../state/flightSearch/airportSearchSlice";
 import { useCallback } from "react";
 
 export function TripTypeMenu() {
-  const triptTypeState = useSelector(
-    (state: RootState) => state.airportSearch.tripType
-  );
+  const { triptTypeState, isLoading } = useSelector((state: RootState) => ({
+    triptTypeState: state.airportSearch.tripType,
+    isLoading: state.airportSearch.remoteFlightsData.isLoading,
+  }));
   const dispatch = useDispatch<AppDispatch>();
 
   const handler = useCallback((val: string) => {
-    console.log(val);
     dispatch(setTripType(val));
   }, []);
 
   return (
     <CustomMenu
+      isDisabled={isLoading}
       menueItems={TRIP_TYPE}
       itemHandler={handler}
       value={triptTypeState}

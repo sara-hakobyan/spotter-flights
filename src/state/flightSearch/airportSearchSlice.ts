@@ -45,6 +45,8 @@ const initialState: {
     [FLIGHT_SEARCH_PARAMS.DestinationEntity]: "95565050",
     [FLIGHT_SEARCH_PARAMS.Date]: "2024-10-15",
     [FLIGHT_SEARCH_PARAMS.CabinClass]: CABIN_CLASS.Economy.toLowerCase(),
+    [FLIGHT_SEARCH_PARAMS.Adults]: 1,
+    [FLIGHT_SEARCH_PARAMS.SortBy]: "best",
     [FLIGHT_SEARCH_PARAMS.Limit]: 5,
   },
   tripType: TRIP_TYPE.One_Way,
@@ -102,10 +104,9 @@ const flightsSearchSlice = createSlice({
     });
     builder.addCase(
       flightSearchAsync.fulfilled,
-      (state, action: PayloadAction<any>) => {
+      (state, action: PayloadAction<{ response: FlightDataResponse }>) => {
         state.remoteFlightsData.isLoading = false;
-        state.remoteFlightsData.data = action.payload;
-        console.log(action.payload);
+        state.remoteFlightsData.data = action.payload.response;
       }
     );
     builder.addCase(flightSearchAsync.rejected, (state, action) => {
@@ -136,9 +137,12 @@ export const flightSearchAsync = createAsyncThunk(
   async (_, { getState, rejectWithValue }) => {
     try {
       const state: any = getState();
-      console.log({ state });
       const params = state.airportSearch.flightParams;
-      const response = await service.searchFlight(params);
+      const response: FlightDataResponse = await service.searchFlight(params);
+      console.log({ response });
+      if (!response.status) {
+        return rejectWithValue(response?.message);
+      }
       return { response };
     } catch (error) {
       const errMsg: string = stringifyingErrMsg(error);
