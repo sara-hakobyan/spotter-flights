@@ -4,23 +4,22 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../../../state/store";
-import { assignSearchParams } from "../../../state/airportSearch/airportSearchSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../state/store";
+import { assignSearchParams } from "../../../state/flightSearch/airportSearchSlice";
 
 interface IDatePicekr {
   label: string;
   disablePast: boolean;
+  isDisabled: boolean;
 }
 
 export default function CustomDatePicker(props: IDatePicekr) {
   const [value, setValue] = React.useState<Dayjs | null>(null);
-  const data = useSelector(
-    (state: RootState) => state.airportSearch.flightParams
-  );
+
   const dispatch = useDispatch<AppDispatch>();
 
-  const datePickerHandler = (newDate: Dayjs | null) => {
+  const datePickerHandler = React.useCallback((newDate: Dayjs | null) => {
     if (!newDate?.isValid()) {
       setValue(null);
       dispatch(assignSearchParams({ date: "" }));
@@ -29,7 +28,7 @@ export default function CustomDatePicker(props: IDatePicekr) {
     setValue(newDate);
     const formatedDate = dayjs(newDate).format("YYYY-MM-DD");
     dispatch(assignSearchParams({ date: formatedDate }));
-  };
+  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -41,6 +40,7 @@ export default function CustomDatePicker(props: IDatePicekr) {
           disablePast={props.disablePast}
           format="YYYY-MM-DD"
           label={props.label}
+          disabled={props.isDisabled}
         />
       </DemoContainer>
     </LocalizationProvider>

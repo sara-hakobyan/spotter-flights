@@ -5,7 +5,7 @@ import { FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/flig
 import {
   airportSearchAsync,
   assignSearchParams,
-} from "../../../state/airportSearch/airportSearchSlice";
+} from "../../../state/flightSearch/airportSearchSlice";
 import {
   Autocomplete,
   AutocompleteChangeReason,
@@ -14,6 +14,7 @@ import {
 
 interface IAutocomplete {
   label: string;
+  isDisabled: boolean;
 }
 
 type OptionT = {
@@ -91,26 +92,32 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
     return [];
   }, [data.remoteAirportSearch[key.origin].data]);
 
-  const onOptionSelect = (
-    e: React.SyntheticEvent,
-    value: OptionT | null,
-    reason: AutocompleteChangeReason
-  ) => {
-    if (reason === "clear") {
-      dispatch(assignSearchParams({ [key.origin]: "" }));
-      dispatch(assignSearchParams({ [key.entity]: "" }));
+  const onOptionSelect = useCallback(
+    (
+      e: React.SyntheticEvent,
+      value: OptionT | null,
+      reason: AutocompleteChangeReason
+    ) => {
+      if (reason === "clear") {
+        dispatch(assignSearchParams({ [key.origin]: "" }));
+        dispatch(assignSearchParams({ [key.entity]: "" }));
 
-      return;
-    }
-    if (reason === "selectOption") {
-      setInputValue(value?.airpot as string);
-      dispatch(assignSearchParams({ [key.origin]: value?.skyId as string }));
-      dispatch(assignSearchParams({ [key.entity]: value?.entityId as string }));
-    }
-  };
+        return;
+      }
+      if (reason === "selectOption") {
+        setInputValue(value?.airpot as string);
+        dispatch(assignSearchParams({ [key.origin]: value?.skyId as string }));
+        dispatch(
+          assignSearchParams({ [key.entity]: value?.entityId as string })
+        );
+      }
+    },
+    [key]
+  );
 
   return (
     <Autocomplete
+      disabled={props.isDisabled}
       filterOptions={(x) => x}
       sx={{ width: "inherit" }}
       options={optionsData || []}

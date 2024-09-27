@@ -34,16 +34,16 @@ export type FlightSearchT = {
   destinationEntityId: string;
   date: string;
   returnDate?: string;
-  cabinClass?: CABIN_CLASS;
+  cabinClass?: string;
   adults?: number;
   childrens?: number;
   infants?: string;
-  sortBy?: SORT_BY;
+  sortBy?: string;
   limit?: number;
   currency?: string;
   carriersIds?: string;
-  market: string;
-  countryCode: string;
+  market?: string;
+  countryCode?: string;
 };
 
 export enum FLIGHT_SEARCH_PARAMS {
@@ -52,4 +52,11 @@ export enum FLIGHT_SEARCH_PARAMS {
   OriginEntity = "originEntityId",
   DestinationEntity = "destinationEntityId",
   Date = "date",
+  ReturnDate = "returnDate",
+  CabinClass = "cabinClass",
+  Adults = "adults",
+  Childrens = "childrens",
+  Infants = "infants",
+  Limit = "limit",
+  SortBy = "sortBy"
 }

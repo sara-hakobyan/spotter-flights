@@ -1,0 +1,208 @@
+.flight_card-container {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1100px;
+  margin: 10px auto;
+  cursor: pointer;
+}
+
+.flight_card-container:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.flight_card-container .time,
+.flight_card-container .duration-skyId,
+.flight_card-container .stops-count,
+.flight_card-container .price,
+.flight_card-container .routes {
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+}
+
+.duration-skyId,
+.routes {
+  flex-direction: column;
+  margin: 20px;
+}
+
+.flight_card-container .divider {
+  margin: 15px;
+}
+
+.flight_card-container .time .img {
+  margin: 20px;
+  transition: transform 0.3s ease;
+}
+
+.flight_card-container .time .img:hover {
+  transform: rotate(10deg) scale(1.1);
+}
+
+.flight_card-container .time {
+  flex: 2;
+}
+
+.flight_card-container .time Typography {
+  color: #333;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.flight_card-container .time Typography:hover {
+  color: #0073e6;
+}
+
+.flight_card-container .duration-skyId {
+  flex: 2;
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.flight_card-container .duration-skyId Typography {
+  color: #666;
+}
+
+.flight_card-container .duration-skyId Typography:hover {
+  color: #ff9800;
+}
+
+.flight_card-container .stops-count {
+  flex: 1;
+  text-align: center;
+  color: #ff5722;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.flight_card-container .stops-count Typography {
+  color: #ff5722;
+}
+
+.flight_card-container .stops-count Typography:hover {
+  color: #e64a19;
+}
+
+.flight_card-container .price {
+  flex: 1;
+  text-align: right;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #4caf50;
+  transition: color 0.3s ease;
+}
+
+.flight_card-container .price:hover {
+  color: #388e3c;
+}
+
+@media (max-width: 1200px) {
+  .flight_card-container {
+    max-width: 90%;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .flight_card-container {
+    padding: 10px;
+    margin: 10px;
+    max-width: 85%;
+  }
+
+  .flight_card-container .time,
+  .flight_card-container .duration-skyId,
+  .flight_card-container .stops-count,
+  .flight_card-container .price {
+    align-items: flex-start;
+    text-align: left;
+    align-items: center;
+  }
+
+  .flight_card-container .time img {
+    margin-bottom: 5px;
+  }
+
+  .flight_card-container .time Typography,
+  .flight_card-container .duration-skyId Typography,
+  .flight_card-container .stops-count Typography,
+  .flight_card-container .price Typography {
+    font-size: 0.9rem;
+  }
+
+  .flight_card-container .price {
+    font-size: 1.1em;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .flight_card-container {
+    margin: 5px;
+    padding: 8px;
+  }
+
+  .flight_card-container .time,
+  .flight_card-container .duration-skyId,
+  .flight_card-container .stops-count,
+  .flight_card-container .price {
+    text-align: left;
+  }
+
+  .flight_card-container .time,
+  .flight_card-container .time .routes,
+  .flight_card-container .time .img {
+    margin: 0;
+  }
+  .flight_card-container .time .img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+
+  .flight_card-container .time Typography,
+  .flight_card-container .duration-skyId Typography,
+  .flight_card-container .stops-count Typography,
+  .flight_card-container .price Typography {
+    font-size: 0.85rem;
+  }
+
+  .flight_card-container .price {
+    font-size: 1em;
+  }
+}
+
+@media only screen and (max-width: 400px) {
+  .flight_card-container {
+    margin: 5px;
+    padding: 6px;
+  }
+
+  .flight_card-container .time,
+  .flight_card-container .duration-skyId,
+  .flight_card-container .stops-count,
+  .flight_card-container .price {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    flex: 1;
+  }
+
+  .flight_card-container .time img {
+    width: 18px;
+    height: 18px;
+  }
+
+  .flight_card-container .time Typography,
+  .flight_card-container .duration-skyId Typography,
+  .flight_card-container .stops-count Typography,
+  .flight_card-container .price Typography {
+    font-size: 0.8rem;
+  }
+
+  .flight_card-container .price {
+    font-size: 0.9em;
+  }
+}
