@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import { TRIP_TYPE } from "../../../dataInterface/stateInterface/flightSearchInterface";
 import CustomMenu from "../genericMenu";
 import { AppDispatch, RootState } from "../../../state/store";
 import { setTripType } from "../../../state/flightSearch/airportSearchSlice";
 import { useCallback } from "react";
+import { TRIP_TYPE } from "../../../dataInterface/stateInterface/enums";
 
 export function TripTypeMenu() {
   const { triptTypeState, isLoading } = useSelector((state: RootState) => ({

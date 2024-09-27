@@ -1,13 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { useCallback, useState } from "react";
-import {
-  CABIN_CLASS,
-  FLIGHT_SEARCH_PARAMS,
-} from "../../../dataInterface/stateInterface/flightSearchInterface";
+
 import { AppDispatch, RootState } from "../../../state/store";
 import { assignSearchParams } from "../../../state/flightSearch/airportSearchSlice";
 import CustomMenu from "../genericMenu";
+import {
+  CABIN_CLASS,
+  FLIGHT_SEARCH_PARAMS,
+} from "../../../dataInterface/stateInterface/enums";
 
 export default function CabinClassMenu() {
   const isLoading = useSelector(

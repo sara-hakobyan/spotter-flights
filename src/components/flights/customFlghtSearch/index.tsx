@@ -4,7 +4,7 @@ import CustomDatePicker from "../datePicker";
 import "./index.css";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../state/store";
-import { TRIP_TYPE } from "../../../dataInterface/stateInterface/flightSearchInterface";
+import { TRIP_TYPE } from "../../../dataInterface/stateInterface/enums";
 
 export function CustomFlightSearch() {
   const { stateTripType, isLoading } = useSelector((state: RootState) => ({

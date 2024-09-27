@@ -1,18 +1,19 @@
 import { Box, Button, IconButton, Menu, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
-import { PASSANGER_TYPE } from "../../dataInterface/stateInterface/flightSearchInterface";
 import { useCallback, useMemo, useState } from "react";
 import PersonIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ArrowDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/ArrowDropUpOutlined";
 import { useSelector } from "react-redux";
 import { RootState } from "../../state/store";
+import { PASSANGER_TYPE } from "../../dataInterface/stateInterface/enums";
 
 export default function PassangerSelect() {
   const data = useSelector((state: RootState) => state.airportSearch);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const [totalPassangers, setTotalPassangers] = useState(1);
 
   const handleClose = useCallback(() => {
     setAnchorEl(null);
@@ -34,11 +35,15 @@ export default function PassangerSelect() {
         disabled={data.remoteFlightsData.isLoading}
       >
         {" "}
-        1
+        {totalPassangers}
       </Button>
       <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
         {Object.values(PASSANGER_TYPE).map((item, index) => (
-          <CustomMenuItem passangerType={item} key={index} />
+          <CustomMenuItem
+            passangerType={item}
+            key={index}
+            // setTotalPassangers={setTotalPassangers}
+          />
         ))}
         <Box>
           <Button>Cancel</Button>
@@ -51,6 +56,7 @@ export default function PassangerSelect() {
 
 interface ICustomMenuItem {
   passangerType: PASSANGER_TYPE;
+  // setTotalPassangers: (val: number) => void;
 }
 
 enum ACTION_TYPE {
@@ -61,6 +67,7 @@ function CustomMenuItem(props: ICustomMenuItem) {
   const [count, setcount] = useState<number>(
     props.passangerType === PASSANGER_TYPE.Adults ? 1 : 0
   );
+  // const [totalCount, setTotalCount] = useState(1);
 
   const ageRestriction = useMemo(() => {
     let age = "";

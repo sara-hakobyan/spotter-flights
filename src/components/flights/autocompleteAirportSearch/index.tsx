@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../state/store";
-import { FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/flightSearchInterface";
 import {
   airportSearchAsync,
   assignSearchParams,
@@ -11,6 +10,7 @@ import {
   AutocompleteChangeReason,
   TextField,
 } from "@mui/material";
+import { FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/enums";
 
 interface IAutocomplete {
   label: string;

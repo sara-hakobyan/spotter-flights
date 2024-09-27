@@ -1,5 +1,5 @@
 import IRemoteData, { IAirportSearchData } from "../../dataInterface/airportsearchData";
-import { FLIGHT_SEARCH_PARAMS } from "../../dataInterface/stateInterface/flightSearchInterface";
+import { FLIGHT_SEARCH_PARAMS } from "../../dataInterface/stateInterface/enums";
 import { FlightDataResponse } from "../../dataInterface/stateInterface/remoteDataInterface/flightsDataInterface";
 
 const initialState: {

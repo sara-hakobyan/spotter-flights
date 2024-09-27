@@ -4,13 +4,10 @@ import IRemoteData, {
   IAirportSearchData,
 } from "../../dataInterface/airportsearchData";
 import { stringifyingErrMsg } from "../../helpers/stringifyErrorMsgs";
-import {
-  CABIN_CLASS,
-  FLIGHT_SEARCH_PARAMS,
-  FlightSearchT,
-  TRIP_TYPE,
-} from "../../dataInterface/stateInterface/flightSearchInterface";
+
 import { FlightDataResponse } from "../../dataInterface/stateInterface/remoteDataInterface/flightsDataInterface";
+import { FlightSearchT } from "../../dataInterface/stateInterface/flightSearchInterface";
+import { CABIN_CLASS, FLIGHT_SEARCH_PARAMS, TRIP_TYPE } from "../../dataInterface/stateInterface/enums";
 const service = new FlightService();
 
 const initialState: {

@@ -7,10 +7,10 @@ import FlightService from "../../services/FlightService";
 import { TripTypeMenu } from "../menus/triptypeMenu";
 import "./index.css";
 import { CustomFlightSearch } from "./customFlghtSearch";
-import { TRIP_TYPE } from "../../dataInterface/stateInterface/flightSearchInterface";
 import CabinClassMenu from "../menus/cabinClassMenu";
 import { useCallback } from "react";
 import LoadingButton from "@mui/lab/LoadingButton";
+import { TRIP_TYPE } from "../../dataInterface/stateInterface/enums";
 
 const service = new FlightService();
 
