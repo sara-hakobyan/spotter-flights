@@ -51,7 +51,6 @@ export const flightsRawDataConverter = (
     return routeData;
   });
 
-  console.log({ flights });
   return flights;
 };
 

@@ -1,19 +1,50 @@
-import { Box, Button, IconButton, Menu, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { useCallback, useMemo, useState } from "react";
+import { Box, Button, Menu, Typography } from "@mui/material";
+
+import { useCallback, useEffect, useState } from "react";
 import PersonIcon from "@mui/icons-material/PersonOutlineOutlined";
 import ArrowDownIcon from "@mui/icons-material/ArrowDropDownOutlined";
 import ArrowUpIcon from "@mui/icons-material/ArrowDropUpOutlined";
-import { useSelector } from "react-redux";
-import { RootState } from "../../state/store";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../state/store";
 import { PASSANGER_TYPE } from "../../dataInterface/stateInterface/enums";
+import { setTotalPassangerCount } from "../../state/flightSearch/airportSearchSlice";
+import { PassangerUpdate } from "./passangerNumberUpdate";
 
 export default function PassangerSelect() {
-  const data = useSelector((state: RootState) => state.airportSearch);
+  const stateData = useSelector((state: RootState) => state.airportSearch);
+  const dispatch = useDispatch<AppDispatch>();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const [totalPassangers, setTotalPassangers] = useState(1);
+  const [errmsg, setErrMsg] = useState("");
+  // const [isDisabled, setIsDisabled] = useState({
+  //   adults: { increase: false, decrease: false },
+  //   children: { increase: false, decrease: false },
+  //   infants: { increase: false, decrease: false },
+  // });
+
+  useEffect(() => {
+    setErrMsg("");
+    const adults = stateData.passangers.adults;
+    const children = stateData.passangers.childrens;
+    const infants = stateData.passangers.infants;
+    const allKids = children + infants;
+    if (adults + children + infants > 9) {
+      setErrMsg("The maximum number of passengers is 9.");
+      return;
+    }
+
+    if (children > 0 || infants > 0) {
+      if (allKids > adults * 2) {
+        setErrMsg("Maximum of 2 children per adult.");
+        return;
+      }
+
+      if (infants > adults) {
+        setErrMsg("1 baby per adult.");
+        return;
+      }
+    }
+  }, [stateData]);
 
   const handleClose = useCallback(() => {
     setAnchorEl(null);
@@ -26,97 +57,47 @@ export default function PassangerSelect() {
     []
   );
 
+  const handleTotalSave = useCallback(
+    (actiontype: string) => {
+      let count = 0;
+      Object.values(stateData.passangers).map((p) => {
+        count += p;
+      });
+      dispatch(setTotalPassangerCount(count));
+      handleClose();
+    },
+    [stateData.passangers]
+  );
+
   return (
     <Box>
       <Button
         onClick={handleBtnClick}
         startIcon={<PersonIcon />}
         endIcon={open ? <ArrowUpIcon /> : <ArrowDownIcon />}
-        disabled={data.remoteFlightsData.isLoading}
+        disabled={stateData.remoteFlightsData.isLoading}
       >
         {" "}
-        {totalPassangers}
+        {stateData.totalPassangerCount}
       </Button>
-      <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        sx={{ "& .MuiMenu-paper": { width: "200px", padding: "10px" } }}
+      >
         {Object.values(PASSANGER_TYPE).map((item, index) => (
-          <CustomMenuItem
-            passangerType={item}
-            key={index}
-            // setTotalPassangers={setTotalPassangers}
-          />
+          <PassangerUpdate passangerType={item} key={index} />
         ))}
-        <Box>
-          <Button>Cancel</Button>
-          <Button>Done</Button>
-        </Box>
+        {errmsg ? (
+          <Typography fontSize={"12px"}>{errmsg}</Typography>
+        ) : (
+          <Box>
+            <Button onClick={() => handleTotalSave("cancel")}>Cancel</Button>
+            <Button onClick={() => handleTotalSave("done")}>Done</Button>
+          </Box>
+        )}
       </Menu>
-    </Box>
-  );
-}
-
-interface ICustomMenuItem {
-  passangerType: PASSANGER_TYPE;
-  // setTotalPassangers: (val: number) => void;
-}
-
-enum ACTION_TYPE {
-  Increase = "increase",
-  Decrease = "decrease",
-}
-function CustomMenuItem(props: ICustomMenuItem) {
-  const [count, setcount] = useState<number>(
-    props.passangerType === PASSANGER_TYPE.Adults ? 1 : 0
-  );
-  // const [totalCount, setTotalCount] = useState(1);
-
-  const ageRestriction = useMemo(() => {
-    let age = "";
-    if (props.passangerType === PASSANGER_TYPE.Adults) {
-      age = "(12+)";
-    } else if (props.passangerType === PASSANGER_TYPE.Childrens) {
-      age = "(2-11)";
-    } else {
-      age = "(-2)";
-    }
-    return age;
-  }, [props.passangerType]);
-
-  const countHandler = useCallback((actionType: string) => {
-    if (actionType === ACTION_TYPE.Decrease) {
-      setcount((prev) => {
-        if (prev === 0) {
-          return prev;
-        }
-        return (prev -= 1);
-      });
-      return;
-    }
-    setcount((prev) => {
-      return (prev += 1);
-    });
-  }, []);
-
-  return (
-    <Box
-      display={"flex"}
-      flexDirection={"row"}
-      alignItems={"flex-start"}
-      padding={"7px"}
-      justifyContent={"space-between"}
-    >
-      <Box>
-        <Typography>{props.passangerType} </Typography>
-        <Typography fontSize={"12px"}>{ageRestriction}</Typography>
-      </Box>
-      <Box display={"flex"} alignItems={"center"}>
-        <IconButton onClick={() => countHandler(ACTION_TYPE.Decrease)}>
-          <RemoveIcon />
-        </IconButton>
-        <Typography>{count}</Typography>
-        <IconButton onClick={() => countHandler(ACTION_TYPE.Increase)}>
-          <AddIcon />
-        </IconButton>
-      </Box>
     </Box>
   );
 }

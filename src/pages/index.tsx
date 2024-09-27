@@ -37,13 +37,6 @@ export default function MainPage() {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
-  console.log(
-    visibleCount,
-    window.innerHeight + document.documentElement.scrollTop !==
-      document.documentElement.offsetHeight
-  );
-
-  console.log(convertedFlights, stateData.error);
 
   return (
     <Box display={"flex"} flexDirection={"column"} alignItems={"center"}>

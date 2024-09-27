@@ -41,3 +41,10 @@ export enum FLIGHT_SEARCH_PARAMS {
   Limit = "limit",
   SortBy = "sortBy",
 }
+
+
+export enum PASSANGER_CATEGORY {
+  Adults = "adults",
+  Children = "childrens",
+  Infants = "infants",
+}
