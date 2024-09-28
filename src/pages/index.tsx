@@ -11,6 +11,7 @@ export default function MainPage() {
   const stateData = useSelector(
     (state: RootState) => state.airportSearch.remoteFlightsData
   );
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const convertedFlights = useMemo(() => {
     if (stateData.data) {
@@ -19,17 +20,14 @@ export default function MainPage() {
     return null;
   }, [stateData.data]);
 
-  const [visibleCount, setVisibleCount] = useState(10);
-
   useEffect(() => {
     const handleScroll = () => {
       if (
-        window.innerHeight + document.documentElement.scrollTop !==
-        document.documentElement.offsetHeight
+        window.innerHeight + document.documentElement.scrollTop >=
+        document.documentElement.offsetHeight - 100
       ) {
-        return;
+        setVisibleCount((prevCount) => prevCount + 10);
       }
-      setVisibleCount((prevCount) => prevCount + 10);
     };
 
     window.addEventListener("scroll", handleScroll);

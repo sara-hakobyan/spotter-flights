@@ -6,7 +6,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../state/store";
-import { assignSearchParams } from "../../../state/flightSearch/airportSearchSlice";
+import {
+  assignDataToLegs,
+  assignSearchParams,
+  resetRemoteFlightData,
+} from "../../../state/flightSearch/airportSearchSlice";
 
 interface IDatePicekr {
   label: string;
@@ -14,6 +18,8 @@ interface IDatePicekr {
   isDisabled?: boolean;
   ismindate?: boolean;
   minDate?: string;
+  id: number;
+  maxDate?: string;
 }
 
 export default function CustomDatePicker(props: IDatePicekr) {
@@ -23,10 +29,11 @@ export default function CustomDatePicker(props: IDatePicekr) {
 
   const datePickerHandler = React.useCallback(
     (newDate: Dayjs | null) => {
+      dispatch(resetRemoteFlightData());
       if (!newDate?.isValid()) {
         setValue(null);
         if (props.label === "Departure") {
-          dispatch(assignSearchParams({ date: "" }));
+          dispatch(assignDataToLegs({ id: props.id, data: { date: "" } }));
           return;
         }
         dispatch(assignSearchParams({ returnDate: "" }));
@@ -36,12 +43,14 @@ export default function CustomDatePicker(props: IDatePicekr) {
       setValue(newDate);
       const formatedDate = dayjs(newDate).format("YYYY-MM-DD");
       if (props.label === "Departure") {
-        dispatch(assignSearchParams({ date: formatedDate }));
+        dispatch(
+          assignDataToLegs({ id: props.id, data: { date: formatedDate } })
+        );
         return;
       }
       dispatch(assignSearchParams({ returnDate: formatedDate }));
     },
-    [props.label]
+    [props.label, props.id]
   );
 
   const isMindate = React.useMemo(() => {
@@ -52,6 +61,14 @@ export default function CustomDatePicker(props: IDatePicekr) {
     return null;
   }, [props.minDate]);
 
+  const isMaxDate = React.useMemo(() => {
+    if (props.maxDate) {
+      const d = new Date(props.maxDate).setHours(0, 0, 0, 0);
+      return d;
+    }
+    return null;
+  }, [props.maxDate]);
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DemoContainer components={["DatePicker"]}>
@@ -61,6 +78,7 @@ export default function CustomDatePicker(props: IDatePicekr) {
           onChange={datePickerHandler}
           disablePast={props.disablePast}
           minDate={dayjs(isMindate)}
+          maxDate={dayjs(isMaxDate)}
           format="YYYY-MM-DD"
           label={props.label}
           disabled={props.isDisabled}

@@ -2,6 +2,10 @@ export interface IFlightConverted {
   id: string;
   price?: string;
   totalcountData: number;
+  legs: LegConverted[];
+}
+
+export interface LegConverted {
   arrivalTime: string;
   departureTime: string;
   departureDate: string;
@@ -15,11 +19,11 @@ export interface IFlightConverted {
 }
 
 export interface Segment {
-  arrivialDate: string;
+  arrivalDate: string;
   departureDate: string;
   departureTime: string;
-  arrivialTime: string;
-  arrivialAirport: string;
+  arrivalTime: string;
+  arrivalAirport: string;
   departureAirport: string;
   duration: string;
   carrier: string;

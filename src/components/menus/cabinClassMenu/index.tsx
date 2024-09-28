@@ -3,7 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useCallback, useState } from "react";
 
 import { AppDispatch, RootState } from "../../../state/store";
-import { assignSearchParams } from "../../../state/flightSearch/airportSearchSlice";
+import {
+  assignSearchParams,
+  resetRemoteFlightData,
+} from "../../../state/flightSearch/airportSearchSlice";
 import CustomMenu from "../genericMenu";
 import {
   CABIN_CLASS,
@@ -18,6 +21,7 @@ export default function CabinClassMenu() {
   const [value, setValue] = useState("Economy");
 
   const handler = useCallback((val: string) => {
+    dispatch(resetRemoteFlightData());
     const newValue = val.replace(/ /g, "_").toLowerCase();
     dispatch(
       assignSearchParams({ [FLIGHT_SEARCH_PARAMS.CabinClass]: newValue })

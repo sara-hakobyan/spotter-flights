@@ -42,6 +42,13 @@ export enum FLIGHT_SEARCH_PARAMS {
   SortBy = "sortBy",
 }
 
+export enum MULTY_CITY_PARAMS {
+  OriginId = "origin",
+  OriginEntityId = "originEntityId",
+  DestinationId = "destination",
+  DestinationEntityId = "destinationEntityId",
+  Date = "date",
+}
 
 export enum PASSANGER_CATEGORY {
   Adults = "adults",

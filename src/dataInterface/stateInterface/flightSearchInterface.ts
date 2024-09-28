@@ -1,9 +1,4 @@
 export type FlightSearchT = {
-  originSkyId: string;
-  destinationSkyId: string;
-  originEntityId: string;
-  destinationEntityId: string;
-  date: string;
   returnDate?: string;
   cabinClass?: string;
   adults?: number;

@@ -26,12 +26,34 @@ button {
   margin-top: 15px;
 }
 
+.flight-search-conatainer {
+  display: flex;
+  align-items: baseline;
+}
+
 @media (max-width: 1200px) {
+  .flight-search-conatainer {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    align-items: center;
+  }
   .menu-container {
     justify-content: center;
+    display: flex;
   }
+  .icon-container {
+    display: flex;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 700px) {
   .card-container {
-    max-width: 90%;
+    max-width: 85%;
+  }
+  .icon-container {
+    width: 270px !important;
   }
 }
 

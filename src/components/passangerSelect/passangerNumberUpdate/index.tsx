@@ -8,6 +8,7 @@ import { AppDispatch, RootState } from "../../../state/store";
 import {
   passangerDecrement,
   passangerIncrement,
+  resetRemoteFlightData,
 } from "../../../state/flightSearch/airportSearchSlice";
 import { Box, IconButton, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
@@ -15,6 +16,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 
 interface IPassangerUpdate {
   passangerType: PASSANGER_TYPE;
+  isIncrease: boolean;
+  isDecrease: boolean;
 }
 
 enum ACTION_TYPE {
@@ -27,6 +30,7 @@ export function PassangerUpdate(props: IPassangerUpdate) {
 
   const stateData = useSelector((state: RootState) => state.airportSearch);
 
+  console.log(props.isDecrease, props.isIncrease);
   const ageRestriction = useMemo(() => {
     let age = "";
     if (props.passangerType === PASSANGER_TYPE.Adults) {
@@ -39,17 +43,21 @@ export function PassangerUpdate(props: IPassangerUpdate) {
     return age;
   }, [props.passangerType]);
 
-  const countHandler = useCallback((actionType: string) => {
-    if (actionType === ACTION_TYPE.Decrease) {
+  const countHandler = useCallback(
+    (actionType: string) => {
+      dispatch(resetRemoteFlightData());
+      if (actionType === ACTION_TYPE.Decrease) {
+        dispatch(
+          passangerDecrement({ key: PASSANGER_CATEGORY[props.passangerType] })
+        );
+        return;
+      }
       dispatch(
-        passangerDecrement({ key: PASSANGER_CATEGORY[props.passangerType] })
+        passangerIncrement({ key: PASSANGER_CATEGORY[props.passangerType] })
       );
-      return;
-    }
-    dispatch(
-      passangerIncrement({ key: PASSANGER_CATEGORY[props.passangerType] })
-    );
-  }, [props.passangerType]);
+    },
+    [props.passangerType]
+  );
 
   const isDisabled = useMemo(() => {
     if (
@@ -78,7 +86,7 @@ export function PassangerUpdate(props: IPassangerUpdate) {
       <Box display={"flex"} alignItems={"center"}>
         <IconButton
           onClick={() => countHandler(ACTION_TYPE.Decrease)}
-          disabled={isDisabled}
+          disabled={isDisabled || props.isDecrease}
         >
           <RemoveIcon />
         </IconButton>
@@ -88,7 +96,8 @@ export function PassangerUpdate(props: IPassangerUpdate) {
         <IconButton
           onClick={() => countHandler(ACTION_TYPE.Increase)}
           disabled={
-            stateData.passangers[PASSANGER_CATEGORY[props.passangerType]] > 9
+            stateData.passangers[PASSANGER_CATEGORY[props.passangerType]] ===
+              9 || props.isIncrease
           }
         >
           <AddIcon />
