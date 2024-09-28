@@ -59,7 +59,7 @@ function RouteTimeline(props: IRouteTimeline) {
           {" "}
           <Typography
             fontSize={"16px"}
-          >{`${props.data.arrivialDate}, ${props.data.arrivialTime} - ${props.data.arrivialAirport}`}</Typography>
+          >{`${props.data.arrivalDate}, ${props.data.arrivalTime} - ${props.data.arrivalAirport}`}</Typography>
         </TimelineContent>
       </TimelineItem>
     </Timeline>

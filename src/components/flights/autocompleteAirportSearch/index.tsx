@@ -1,23 +1,18 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../../state/store";
-import { FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/flightSearchInterface";
 import {
   airportSearchAsync,
-  assignSearchParams,
+  resetAirportSearch,
 } from "../../../state/flightSearch/airportSearchSlice";
 import {
   Autocomplete,
   AutocompleteChangeReason,
   TextField,
 } from "@mui/material";
+import { FLIGHT_SEARCH_PARAMS } from "../../../dataInterface/stateInterface/enums";
 
-interface IAutocomplete {
-  label: string;
-  isDisabled: boolean;
-}
-
-type OptionT = {
+export type OptionT = {
   locationType: string;
   skyId: string;
   entityId: string;
@@ -26,6 +21,12 @@ type OptionT = {
   suggestedLocal: string;
   airpot: string;
 };
+interface IAutocomplete {
+  label: string;
+  isDisabled: boolean;
+  id: number;
+  assignValue: (label: string, data: any, id: number) => void;
+}
 
 export default function AutoCompeteAirport(props: IAutocomplete) {
   const data = useSelector((state: RootState) => state.airportSearch);
@@ -33,30 +34,17 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
   const [inputValue, setInputValue] = useState("");
   const debouncedId = useRef<NodeJS.Timeout | null>(null);
 
-  const key = useMemo(() => {
-    if (props.label === "from") {
-      return {
-        origin: FLIGHT_SEARCH_PARAMS.Origin,
-        entity: FLIGHT_SEARCH_PARAMS.OriginEntity,
-      };
-    }
-    return {
-      origin: FLIGHT_SEARCH_PARAMS.Destination,
-      entity: FLIGHT_SEARCH_PARAMS.DestinationEntity,
-    };
-  }, [props.label]);
-
   useEffect(() => {
     if (!inputValue) {
       return;
     }
     const fetching = async () => {
       await dispatch(
-        airportSearchAsync({ value: inputValue, key: key.origin })
+        airportSearchAsync({ value: inputValue, key: props.label })
       );
     };
     fetching();
-  }, [inputValue, key]);
+  }, [inputValue, props.label]);
 
   const onInputChange = useCallback(
     async (e: React.SyntheticEvent, value: string) => {
@@ -74,8 +62,8 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
   );
 
   const optionsData = useMemo(() => {
-    if (data.remoteAirportSearch[key.origin].data) {
-      const arr = data.remoteAirportSearch[key.origin].data?.data.map((d) => {
+    if (data.remoteAirportSearch[props.label].data) {
+      const arr = data.remoteAirportSearch[props.label].data?.data.map((d) => {
         const obj = {
           locationType: d.navigation.relevantHotelParams.entityType,
           skyId: d.skyId,
@@ -90,7 +78,7 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
       return arr;
     }
     return [];
-  }, [data.remoteAirportSearch[key.origin].data]);
+  }, [data.remoteAirportSearch[props.label].data]);
 
   const onOptionSelect = useCallback(
     (
@@ -99,20 +87,16 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
       reason: AutocompleteChangeReason
     ) => {
       if (reason === "clear") {
-        dispatch(assignSearchParams({ [key.origin]: "" }));
-        dispatch(assignSearchParams({ [key.entity]: "" }));
-
+        props.assignValue(props.label, "", props.id);
         return;
       }
       if (reason === "selectOption") {
         setInputValue(value?.airpot as string);
-        dispatch(assignSearchParams({ [key.origin]: value?.skyId as string }));
-        dispatch(
-          assignSearchParams({ [key.entity]: value?.entityId as string })
-        );
+        props.assignValue(props.label, value, props.id);
       }
+      dispatch(resetAirportSearch({ key: props.label }));
     },
-    [key]
+    [props.label]
   );
 
   return (
@@ -121,7 +105,7 @@ export default function AutoCompeteAirport(props: IAutocomplete) {
       filterOptions={(x) => x}
       sx={{ width: "inherit" }}
       options={optionsData || []}
-      loading={data.remoteAirportSearch[key.origin].isLoading}
+      loading={data.remoteAirportSearch[props.label].isLoading}
       getOptionLabel={(option) => option.suggestedLocal}
       onInputChange={onInputChange}
       onChange={onOptionSelect}

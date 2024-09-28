@@ -39,4 +39,10 @@ export default class FlightService {
     const data = await this._fetch(path, "GET", params);
     return data;
   }
+
+  async searchFlightsMultiStops(params: any) {
+    const path = `${this.baseURL}/searchFlightsMultiStops`;
+    const data = await this._fetch(path, "GET", params);
+    return data;
+  }
 }
